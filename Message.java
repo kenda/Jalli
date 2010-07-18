@@ -17,165 +17,178 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with Jalli. If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 /**
  * Class for saving chat messages.
  */
 public class Message {
 
-/* ------------------------------------------------------------------ */
-														// attributes
-/**
- * The time when the message was sent.
- */
-	private String time;
+    /* ------------------------------------------------------------------ */
+    // attributes
+    /**
+     * The time when the message was sent.
+     */
+    private String time;
 
-/**
- * The date when the message was sent.
- */
-	public Integer date;
-	
-/**
- * The content of the message.
- */
-	public String message;
-	
-/**
- * The name of the person who sent the message.
- */
-	private String buddyName;
+    /**
+     * The date when the message was sent.
+     */
+    public Integer date;
 
-/**
- * The id of the person who sent the message.
- * E.g. icq number or jabber id.
- */
-	private String buddyID;
+    /**
+     * The content of the message.
+     */
+    public String message;
 
-/**
- * Whether the author of the message is the owner of the logs.
- */
-	public Boolean isUser;
+    /**
+     * The name of the person who sent the message.
+     */
+    private String buddyName;
 
-/* ------------------------------------------------------------------ */
-														// constructor
-	public Message(){
-	}
+    /**
+     * The id of the person who sent the message. E.g. icq number or jabber id.
+     */
+    private String buddyID;
 
-/* ------------------------------------------------------------------ */
-														// setter
+    /**
+     * Whether the author of the message is the owner of the logs.
+     */
+    public Boolean isUser;
 
-/**
- * Sets the time of the message.
- * @param time the time
- */
-	public void setTime(String time){
-		this.time=time;
-	}
+    /* ------------------------------------------------------------------ */
+    // constructor
+    public Message() {
+    }
 
-/**
- * Sets the date of the message.
- * @param date the date
- */
-	public void setDate(Integer date){
-		this.date=date;
-	}
+    /* ------------------------------------------------------------------ */
+    // setter
 
-/**
- * Sets the content of the message.
- * @param message the content
- */
-	public void setMessage(String message){
-		this.message=message;
-	}
+    /**
+     * Sets the time of the message.
+     * 
+     * @param time the time
+     */
+    public void setTime(String time) {
+        this.time = time;
+    }
 
-/**
- * Sets the name of the author.
- * @param name the name
- */
-	public void setBuddyName(String name){
-		this.buddyName=name;
-	}
+    /**
+     * Sets the date of the message.
+     * 
+     * @param date the date
+     */
+    public void setDate(Integer date) {
+        this.date = date;
+    }
 
-/**
- * Sets the id of the author.
- * @param id the id
- */
-	public void setBuddyID(String id){
-		this.buddyID=id;
-	}
+    /**
+     * Sets the content of the message.
+     * 
+     * @param message the content
+     */
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-/**
- * Sets whether the author is the owner of the logs.
- * @param isUser true, if the author is the user himself. Otherwise false.
- */
-	public void setIsUser(Boolean isUser){
-		this.isUser=isUser;
-	}
+    /**
+     * Sets the name of the author.
+     * 
+     * @param name the name
+     */
+    public void setBuddyName(String name) {
+        this.buddyName = name;
+    }
 
-/* ------------------------------------------------------------------ */
-														// getter
-/**
- * Returns a string in the format hh:mm:ss
- * @return the time when the message was written
- */
-	public String getTime(){
-		return this.time;
-	}
+    /**
+     * Sets the id of the author.
+     * 
+     * @param id the id
+     */
+    public void setBuddyID(String id) {
+        this.buddyID = id;
+    }
 
-/**
- * Returns a number in the format yyyymmdd
- * @return the date when the message was written
- */
-	public Integer getDate(){
-		return this.date;
-	}
+    /**
+     * Sets whether the author is the owner of the logs.
+     * 
+     * @param isUser true, if the author is the user himself. Otherwise false.
+     */
+    public void setIsUser(Boolean isUser) {
+        this.isUser = isUser;
+    }
 
-/**
- * Return the content of the message.
- * @return the content
- */
-	public String getMessageText(){
-		return this.message;
-	}
+    /* ------------------------------------------------------------------ */
+    // getter
+    /**
+     * Returns a string in the format hh:mm:ss
+     * 
+     * @return the time when the message was written
+     */
+    public String getTime() {
+        return this.time;
+    }
 
-/**
- * Returns the name of the message author.
- * @return the author's name
- */
-	public String getBuddyName(){
-		return this.buddyName;
-	}
+    /**
+     * Returns a number in the format yyyymmdd
+     * 
+     * @return the date when the message was written
+     */
+    public Integer getDate() {
+        return this.date;
+    }
 
-/**
- * Returns the id of the message author.
- * @return the author's id
- */
-	public String getBuddyID(){
-		return this.buddyID;
-	}
+    /**
+     * Return the content of the message.
+     * 
+     * @return the content
+     */
+    public String getMessageText() {
+        return this.message;
+    }
 
-/**
- * Returns whether the author of the message is the user himself.
- * @return true, if the author is the logs owner. Otherwise false.
- */
-	public Boolean getIsUser(){
-		return this.isUser;
-	}
+    /**
+     * Returns the name of the message author.
+     * 
+     * @return the author's name
+     */
+    public String getBuddyName() {
+        return this.buddyName;
+    }
 
-/* ------------------------------------------------------------------ */
-														// service-method
-/**
- * Formats a message to a String.
- * @return the message as formatted string
- */
-	public String toString(){
-		String s = "Datum: "+date+"\nZeit: "+time+"\nMsg: "+message+"\nName: "+buddyName+"\nID: "+buddyID;
-		return s;
-	}
+    /**
+     * Returns the id of the message author.
+     * 
+     * @return the author's id
+     */
+    public String getBuddyID() {
+        return this.buddyID;
+    }
 
-/* ------------------------------------------------------------------ */
-														// main-method
-	public static void main (String args[]) {		
-	}
+    /**
+     * Returns whether the author of the message is the user himself.
+     * 
+     * @return true, if the author is the logs owner. Otherwise false.
+     */
+    public Boolean getIsUser() {
+        return this.isUser;
+    }
+
+    /* ------------------------------------------------------------------ */
+    // service-method
+    /**
+     * Formats a message to a String.
+     * 
+     * @return the message as formatted string
+     */
+    public String toString() {
+        String s = "Datum: " + date + "\nZeit: " + time + "\nMsg: " + message
+                + "\nName: " + buddyName + "\nID: " + buddyID;
+        return s;
+    }
+
+    /* ------------------------------------------------------------------ */
+    // main-method
+    public static void main(String args[]) {
+    }
 }

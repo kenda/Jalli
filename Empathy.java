@@ -17,7 +17,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with Jalli. If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 import java.util.List;
 import java.io.File;
@@ -31,126 +31,145 @@ import javax.xml.stream.*;
  * Class to handle logs of empathy messenger.
  */
 public class Empathy extends Messenger {
-/* ------------------------------------------------------------------ */
-															// Input																
-	public void readInputFile(List<File> filenames){
+    /* ------------------------------------------------------------------ */
+    // Input
+    public void readInputFile(List<File> filenames) {
 
-	for(int j=0; j<filenames.size();j++){
-		try{
-			XMLInputFactory factory = XMLInputFactory.newInstance(); 
-			XMLStreamReader parser = factory.createXMLStreamReader( new FileInputStream( filenames.get(j) ) ); 
- 
-			while ( parser.hasNext() ){ 
+        for(int j = 0; j < filenames.size(); j++) {
+            try {
+                XMLInputFactory factory = XMLInputFactory.newInstance();
+                XMLStreamReader parser = factory
+                        .createXMLStreamReader(new FileInputStream(filenames
+                                .get(j)));
 
-// parse XML file and check the events
-			Message a=null;
-				if(parser.getEventType()==XMLStreamConstants.START_ELEMENT){
-					if (parser.getLocalName() == "message"){
-						a = new Message();
-						
-// read the attributes of the message tag						
-						for ( int i = 0; i < parser.getAttributeCount(); i++ ){	
-							switch(parser.getAttributeLocalName(i).hashCode()){
-									case 3560141:	String dateTime = parser.getAttributeValue(i);
-													String[] sParam = dateTime.split("T");
-													a.setTime(sParam[1]);
-													a.setDate(new Integer(sParam[0]));
-													break;
-									case 3355: 		a.setBuddyID(parser.getAttributeValue(i));
-													break;
-									case 3373707:	a.setBuddyName(parser.getAttributeValue(i));
-													break;
-									case -1179102219:a.setIsUser(new Boolean(parser.getAttributeValue(i)));
-													break;
-									default: 		break;
-							}
-						}
-						
-// read the text of the message tag						
-						a.setMessage(parser.getElementText());
-					}
-				}
-				else if(parser.getEventType()==XMLStreamConstants.END_DOCUMENT)
-					parser.close(); 
-				
-				if(a!=null) Cache.getInstance().addMessage(a);
-				parser.next(); 
-			}
-		}
-		catch(FileNotFoundException e)
-		{
-			System.err.println( "File " + filenames.get(j) + " not found!");
-			System.exit(1);
-		}
-		catch(XMLStreamException e){
-			System.err.println("XML parsing error. Please check your Inputfile for correct xml syntax or "+
-								"contact the author when you think thats a bug.\n-------------details-------------\n"+e.getLocation());
-			e.printStackTrace();
-			System.exit(1);
-		}
-	}
-	}		
-	
-/* ------------------------------------------------------------------ */
-															// Output													
-	public void writeOutputFile(){
+                while(parser.hasNext()) {
 
-	if(Cache.getInstance().getNumberAllMsg()!=0){
-		Cache.getInstance().calcDifferentDates();
-		for(int a=0; a < Cache.getInstance().getDiffDates();a++){
-			String filename = Cache.getInstance().getMessage(0).getDate()+".log";
-			try{
-				XMLOutputFactory factory = XMLOutputFactory.newInstance(); 
-				XMLStreamWriter writer = factory.createXMLStreamWriter( 
-						new FileWriter( filename ) ); 
- 
-				writer.writeStartDocument("utf-8","1.0"); 
-					writer.writeProcessingInstruction("xml-stylesheet type=\"text/xsl\" href=\"empathy-log.xsl\"");
-						writer.writeStartElement( "log" );
-							Cache.getInstance().calcNumberMessagesSameDate();
-							for(int i = 0;i < Cache.getInstance().getNumberMsgDiffDates();i++){
-							
-								writer.writeStartElement("message");
-									writer.writeAttribute( "time", Cache.getInstance().getMessage(0).getDate() +"T" + Cache.getInstance().getMessage(0).getTime());
+                    // parse XML file and check the events
+                    Message a = null;
+                    if(parser.getEventType() == XMLStreamConstants.START_ELEMENT) {
+                        if(parser.getLocalName() == "message") {
+                            a = new Message();
 
-									writer.writeAttribute( "id", Cache.getInstance().getMessage(0).getBuddyID() );
+                            // read the attributes of the message tag
+                            for(int i = 0; i < parser.getAttributeCount(); i++) {
+                                switch(parser.getAttributeLocalName(i)
+                                        .hashCode()) {
+                                    case 3560141:
+                                        String dateTime = parser
+                                                .getAttributeValue(i);
+                                        String[] sParam = dateTime.split("T");
+                                        a.setTime(sParam[1]);
+                                        a.setDate(new Integer(sParam[0]));
+                                        break;
+                                    case 3355:
+                                        a.setBuddyID(parser
+                                                .getAttributeValue(i));
+                                        break;
+                                    case 3373707:
+                                        a.setBuddyName(parser
+                                                .getAttributeValue(i));
+                                        break;
+                                    case -1179102219:
+                                        a.setIsUser(new Boolean(parser
+                                                .getAttributeValue(i)));
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
 
-									writer.writeAttribute( "name", Cache.getInstance().getMessage(0).getBuddyName() );
+                            // read the text of the message tag
+                            a.setMessage(parser.getElementText());
+                        }
+                    } else if(parser.getEventType() == XMLStreamConstants.END_DOCUMENT)
+                        parser.close();
 
-									writer.writeAttribute( "isuser", Cache.getInstance().getMessage(0).getIsUser().toString() );
+                    if(a != null)
+                        Cache.getInstance().addMessage(a);
+                    parser.next();
+                }
+            } catch(FileNotFoundException e) {
+                System.err.println("File " + filenames.get(j) + " not found!");
+                System.exit(1);
+            } catch(XMLStreamException e) {
+                System.err
+                        .println("XML parsing error. Please check your Inputfile for correct xml syntax or "
+                                + "contact the author when you think thats a bug.\n-------------details-------------\n"
+                                + e.getLocation());
+                e.printStackTrace();
+                System.exit(1);
+            }
+        }
+    }
 
-									writer.writeAttribute( "type", "normal");
+    /* ------------------------------------------------------------------ */
+    // Output
+    public void writeOutputFile() {
 
-									writer.writeCharacters(Cache.getInstance().getMessage(0).getMessageText());
-								writer.writeEndElement();
-							Cache.getInstance().removeMessage(0);
-							}
-							
-						writer.writeEndElement();
-				writer.writeEndDocument(); 
-				writer.close();
-			}
-			catch(IOException e){
-				System.err.println("I/O Exception. Please contact the author or report this as a bug.\n-------------details-------------");
-				e.printStackTrace();
-				System.exit(1);
-			}
-			catch(XMLStreamException e){
-				System.err.println("XML parsing error. Please contact the author or report this as a bug.\n-------------details-------------\n"
-									+e.getLocation());
-				e.printStackTrace();
-				System.exit(1);
-			}
-			System.out.println("Log succesfully converted to " + filename);
-		}
-	}
-	else
-		System.out.println("There are no messages to convert!");
-	}
+        if(Cache.getInstance().getNumberAllMsg() != 0) {
+            Cache.getInstance().calcDifferentDates();
+            for(int a = 0; a < Cache.getInstance().getDiffDates(); a++) {
+                String filename = Cache.getInstance().getMessage(0).getDate()
+                        + ".log";
+                try {
+                    XMLOutputFactory factory = XMLOutputFactory.newInstance();
+                    XMLStreamWriter writer = factory
+                            .createXMLStreamWriter(new FileWriter(filename));
 
-		
-/* ------------------------------------------------------------------ */
-														// main-method
-	public static void main (String args[]) {			
-	}
+                    writer.writeStartDocument("utf-8", "1.0");
+                    writer
+                            .writeProcessingInstruction("xml-stylesheet type=\"text/xsl\" href=\"empathy-log.xsl\"");
+                    writer.writeStartElement("log");
+                    Cache.getInstance().calcNumberMessagesSameDate();
+                    for(int i = 0; i < Cache.getInstance()
+                            .getNumberMsgDiffDates(); i++) {
+
+                        writer.writeStartElement("message");
+                        writer.writeAttribute("time", Cache.getInstance()
+                                .getMessage(0).getDate()
+                                + "T"
+                                + Cache.getInstance().getMessage(0).getTime());
+
+                        writer.writeAttribute("id", Cache.getInstance()
+                                .getMessage(0).getBuddyID());
+
+                        writer.writeAttribute("name", Cache.getInstance()
+                                .getMessage(0).getBuddyName());
+
+                        writer.writeAttribute("isuser", Cache.getInstance()
+                                .getMessage(0).getIsUser().toString());
+
+                        writer.writeAttribute("type", "normal");
+
+                        writer.writeCharacters(Cache.getInstance()
+                                .getMessage(0).getMessageText());
+                        writer.writeEndElement();
+                        Cache.getInstance().removeMessage(0);
+                    }
+
+                    writer.writeEndElement();
+                    writer.writeEndDocument();
+                    writer.close();
+                } catch(IOException e) {
+                    System.err
+                            .println("I/O Exception. Please contact the author or report this as a bug.\n-------------details-------------");
+                    e.printStackTrace();
+                    System.exit(1);
+                } catch(XMLStreamException e) {
+                    System.err
+                            .println("XML parsing error. Please contact the author or report this as a bug.\n-------------details-------------\n"
+                                    + e.getLocation());
+                    e.printStackTrace();
+                    System.exit(1);
+                }
+                System.out.println("Log succesfully converted to " + filename);
+            }
+        } else
+            System.out.println("There are no messages to convert!");
+    }
+
+    /* ------------------------------------------------------------------ */
+    // main-method
+    public static void main(String args[]) {
+    }
 }
